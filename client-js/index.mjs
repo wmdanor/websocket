@@ -50,7 +50,6 @@ function createConn(url) {
   })
 
   websocket.addEventListener("message", (event) => {
-    console.log("message", event)
     addListItem(messagesList, msg(event.data));
   })
 

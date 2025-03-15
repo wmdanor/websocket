@@ -1,7 +1,20 @@
 
-.PHONY: autobahn
+.DEFAULT_GOAL:=dev
+.PHONY: dev test
 
-autobahn:
-	docker run -it --rm -v ${PWD}/config:/config \
-		-v ${PWD}/reports:/reports crossbario/autobahn-testsuite \
-		wstest -m fuzzingclient -s /config/fuzzingclient.json
+name?=local
+
+log?=0
+
+run:
+	WS_LOG=$(log) go \
+		run ./examples/${name}
+
+dev:
+	WS_LOG=$(log) gow -c -r \
+		-w . \
+		-w ./examples/${name} \
+		run ./examples/${name}
+
+test:
+	go test ./...
