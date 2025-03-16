@@ -13,13 +13,15 @@ import (
 	websocket "github.com/wmdanor/websocket/go"
 )
 
-type Websocket struct{}
+var (
+	upgrader websocket.Upgrader = websocket.Upgrader{}
+)
 
 func handler(w http.ResponseWriter, req *http.Request) {
-	c, err := websocket.UpgradeConnection(w, req)
+	c, err := upgrader.Upgrade(w, req)
 	if err != nil {
 		slog.Error("Opening connection failed", "err", err)
-		if errors.Is(err, websocket.ErrInvalidHandshakeRequest) {
+		if errors.Is(err, websocket.ErrHandshakeFailure) {
 			w.WriteHeader(400)
 		} else {
 			w.WriteHeader(500)
@@ -62,10 +64,7 @@ func handler(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-	l := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
-		Level: slog.LevelDebug,
-	}))
-	slog.SetDefault(l)
+	setupLogger()
 
 	port, err := strconv.Atoi(os.Getenv("PORT"))
 	if err != nil {
@@ -78,4 +77,31 @@ func main() {
 
 	http.HandleFunc("/", handler)
 	log.Fatal(http.ListenAndServe(addr, nil))
+}
+
+func setupLogger() {
+	l := slog.New(slog.DiscardHandler)
+	if os.Getenv("LOG") != "1" {
+		slog.SetDefault(l)
+		return
+	}
+
+	logDest := os.Stdout
+	if os.Getenv("LOG_FILE") != "" {
+		f, err := os.Create(os.Getenv("WS_LOG_FILE"))
+		if err != nil {
+			panic(err)
+		}
+		logDest = f
+	}
+
+	l = slog.New(slog.NewTextHandler(logDest, &slog.HandlerOptions{
+		Level: slog.LevelDebug,
+	}))
+
+	if os.Getenv("WS_LOG") == "1" {
+		upgrader.InternalLogger = l
+	}
+
+	slog.SetDefault(l)
 }

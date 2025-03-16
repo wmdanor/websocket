@@ -3,6 +3,7 @@ package websocket
 import (
 	"errors"
 	"fmt"
+	"io"
 	"slices"
 	"time"
 )
@@ -92,16 +93,24 @@ func (c *Conn) close(code CloseCode, message string) error {
 
 	c.l.Debug("Closing websocket connection")
 
-	err := c.WriteClose(code, message)
-	if err != nil {
-		c.l.Debug("Failed to send close frame", "err", err)
-		return err
+	if !c.sentConnClose {
+		if err := c.WriteClose(code, message); err != nil {
+			c.l.Debug("Failed to send close frame", "err", err)
+			return err
+		}
+	} else {
+		c.l.Debug("Already sent close frame, skipping")
 	}
 
-	err = c.waitCloseFrame()
-	if err != nil {
-		c.l.Debug("Failed to receive close frame", "err", err)
-		return err
+	if !c.recvConnClose {
+		if err := c.waitCloseFrame(); err != nil {
+			if !errors.Is(err, io.EOF) {
+				c.l.Debug("Failed to receive close frame", "err", err)
+				return err
+			}
+		}
+	} else {
+		c.l.Debug("Already received close frame, skipping")
 	}
 
 	c.l.Debug("Websocket connection closed")
@@ -118,7 +127,7 @@ func (c *Conn) waitCloseFrame() error {
 	timeout := 15 * time.Second
 	err := c.conn.SetReadDeadline(time.Now().Add((timeout)))
 	if err != nil {
-		return fmt.Errorf("failed to set timeout for socker read: [%w]", err)
+		return fmt.Errorf("failed to set timeout for socket read: [%w]", err)
 	}
 
 	deadline := time.Now().Add(time.Second * 15)

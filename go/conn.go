@@ -4,14 +4,8 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/binary"
-	"errors"
 	"log/slog"
 	"net"
-	"os"
-)
-
-var (
-	ErrInvalidHandshakeRequest = errors.New("invalid handshake request")
 )
 
 type Conn struct {
@@ -42,22 +36,7 @@ const (
 	minWriteBufSize = 4096
 )
 
-func newConn(netConn net.Conn, reader *bufio.Reader, writeBuf []byte) (*Conn, error) {
-	l := slog.New(slog.DiscardHandler)
-	if os.Getenv("WS_LOG") == "1" {
-		w := os.Stdout
-		if os.Getenv("WS_LOG_FILE") != "" {
-			f, err := os.Create(os.Getenv("WS_LOG_FILE"))
-			if err != nil {
-				return nil, err
-			}
-			w = f
-		}
-		l = slog.New(slog.NewTextHandler(w, &slog.HandlerOptions{
-			Level: slog.LevelDebug,
-		}))
-	}
-
+func newConn(netConn net.Conn, reader *bufio.Reader, writeBuf []byte, l *slog.Logger) (*Conn, error) {
 	if len(writeBuf) < minWriteBufSize {
 		writeBuf = make([]byte, minWriteBufSize)
 	}

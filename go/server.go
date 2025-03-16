@@ -5,22 +5,23 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
-	"os"
 )
+
+type Upgrader struct {
+	InternalLogger *slog.Logger
+}
 
 // On a server call this in your http handler
 // to upgrade connection to Websocket connection
-func UpgradeConnection(w http.ResponseWriter, req *http.Request) (*Conn, error) {
-	l := slog.New(slog.DiscardHandler)
-	if os.Getenv("WS_LOG") == "1" {
-		l = slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
-			Level: slog.LevelDebug,
-		}))
+func (u *Upgrader) Upgrade(w http.ResponseWriter, req *http.Request) (*Conn, error) {
+	l := u.InternalLogger
+	if l == nil {
+		l = slog.New(slog.DiscardHandler)
 	}
 
 	l.Debug("Opening new websocket connection")
 
-	err := handleOpenHandshake(w, req, l)
+	err := u.handleOpenHandshake(w, req, l)
 	if err != nil {
 		l.Debug(fmt.Sprintf("Failed to open websocket connection: %s", err.Error()))
 		return nil, err
@@ -34,7 +35,7 @@ func UpgradeConnection(w http.ResponseWriter, req *http.Request) (*Conn, error) 
 
 	l.Debug("New websocket connection opened")
 
-	conn, err := newConn(netConn, rw.Reader, rw.AvailableBuffer())
+	conn, err := newConn(netConn, rw.Reader, rw.AvailableBuffer(), l)
 	if err != nil {
 		return nil, err
 	}
@@ -44,34 +45,34 @@ func UpgradeConnection(w http.ResponseWriter, req *http.Request) (*Conn, error) 
 	return conn, nil
 }
 
-func handleOpenHandshake(w http.ResponseWriter, req *http.Request, l *slog.Logger) error {
+func (u *Upgrader) handleOpenHandshake(w http.ResponseWriter, req *http.Request, l *slog.Logger) error {
 	w.Header().Add("Access-Control-Allow-Origin", "*")
 
 	l.Debug("Handling opening handshake")
 
 	if req.Method != http.MethodGet {
-		return fmt.Errorf("%w: method must be GET, actual %q",
-			ErrInvalidHandshakeRequest, req.Method)
+		return fmt.Errorf("%w: method must be %q, actual %q",
+			ErrHandshakeFailure, http.MethodGet, req.Method)
 	}
 
 	// Check Host header
 
-	actual, ok := headerEquals(req, headerUpgrade, headerUpgradeExpected)
+	actual, ok := headerEquals(req.Header, headerUpgrade, headerUpgradeExpected)
 	if !ok {
 		return fmt.Errorf(`%w: %q header must be %q , actual %q`,
-			ErrInvalidHandshakeRequest, headerUpgrade, headerUpgradeExpected, actual)
+			ErrHandshakeFailure, headerUpgrade, headerUpgradeExpected, actual)
 	}
 
-	actual, ok = headerEquals(req, headerConn, headerConnExpected)
+	actual, ok = headerEquals(req.Header, headerConn, headerConnExpected)
 	if !ok {
 		return fmt.Errorf(`%w, %q header must be %q, actual: %q`,
-			ErrInvalidHandshakeRequest, headerConn, headerConnExpected, actual)
+			ErrHandshakeFailure, headerConn, headerConnExpected, actual)
 	}
 
-	actual, ok = headerEquals(req, headerSecWsVersion, headerSecWsVersionExpected)
+	actual, ok = headerEquals(req.Header, headerSecWsVersion, headerSecWsVersionExpected)
 	if !ok {
 		return fmt.Errorf(`%w, %q header must be %q, received: %q`,
-			ErrInvalidHandshakeRequest, headerSecWsVersion, headerSecWsVersion, actual)
+			ErrHandshakeFailure, headerSecWsVersion, headerSecWsVersion, actual)
 	}
 
 	secWsProto := req.Header.Get(headerSecWsProto)
@@ -88,16 +89,16 @@ func handleOpenHandshake(w http.ResponseWriter, req *http.Request, l *slog.Logge
 
 	secWsKey := req.Header.Get(headerSecWsKey)
 	if len(secWsKey) == 0 {
-		return fmt.Errorf("%w: missing %q header", ErrInvalidHandshakeRequest, headerSecWsKey)
+		return fmt.Errorf("%w: missing %q header", ErrHandshakeFailure, headerSecWsKey)
 	} else {
 		decoded, err := base64.StdEncoding.DecodeString(secWsKey)
 		if err != nil {
 			return fmt.Errorf("%w: failed to base64 decode %q header: [%w]",
-				ErrInvalidHandshakeRequest, headerSecWsKey, err)
+				ErrHandshakeFailure, headerSecWsKey, err)
 		}
 		if len(decoded) != 16 {
 			return fmt.Errorf("%w: decoded value of %q must be 16 bytes, received %d bytes",
-				ErrInvalidHandshakeRequest, headerSecWsKey, len(decoded))
+				ErrHandshakeFailure, headerSecWsKey, len(decoded))
 		}
 	}
 

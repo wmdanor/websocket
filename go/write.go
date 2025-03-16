@@ -63,8 +63,8 @@ func (c *Conn) NextWriter(messageType MessageType) (io.WriteCloser, error) {
 		return nil, c.err
 	}
 
-	if c.sentConnClose || c.recvConnClose {
-		return nil, fmt.Errorf("connection close was initiated")
+	if c.sentConnClose && c.recvConnClose {
+		return nil, fmt.Errorf("connection closed")
 	}
 
 	if c.curWriter != nil {

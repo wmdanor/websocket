@@ -29,13 +29,14 @@ func (c *Conn) NextMessage() (MessageType, []byte, error) {
 	return mt, buf.Bytes(), nil
 }
 
+// If connection was closed, will return: errors.Is(err, io.EOF) == true
 func (c *Conn) NextReader() (mt MessageType, data io.Reader, err error) {
 	if c.err != nil {
 		return MessageType(0), nil, c.err
 	}
 
-	if c.sentConnClose || c.recvConnClose {
-		return MessageType(0), nil, fmt.Errorf("connection close was initiated")
+	if c.sentConnClose && c.recvConnClose {
+		return MessageType(0), nil, fmt.Errorf("connection closed")
 	}
 
 	if c.curReader != nil {
@@ -280,7 +281,8 @@ func (c *Conn) readFrameHeader() (*internal.FrameHeader, error) {
 				if err != nil {
 					return nil, fmt.Errorf("failed to handle close frame: [%w]", err)
 				}
-				return nil, fmt.Errorf("connection was closed")
+				c.err = fmt.Errorf("connection was closed: [%w]", io.EOF)
+				return &f, c.err
 			} else if f.Opcode == internal.OpcodePing {
 				c.l.Debug("received frame is ping, handling specially")
 				err = c.handlePing(buf)

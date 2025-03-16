@@ -1,0 +1,180 @@
+{
+   "agent": "ws",
+   "behavior": "OK",
+   "behaviorClose": "OK",
+   "case": 266,
+   "closedByMe": true,
+   "createStats": true,
+   "createWirelog": true,
+   "description": "Send fragmented text message message with message payload of length 4 * 2**20 (4M). Sent out in fragments of 1M.",
+   "droppedByMe": true,
+   "duration": 20,
+   "expectation": "Receive echo'ed text message (with payload as sent).",
+   "expected": {},
+   "expectedClose": {
+      "closeCode": [
+         1000
+      ],
+      "closedByMe": true,
+      "requireClean": true
+   },
+   "failedByMe": false,
+   "httpRequest": "GET /runCase?case=266&agent=ws HTTP/1.1\r\nHost: localhost:9001\r\nUser-Agent: Go-http-client/1.1\r\nConnection: Upgrade\r\nSec-WebSocket-Key: uliZPTN1OjrpaC3yEVxw3A==\r\nSec-WebSocket-Version: 13\r\nUpgrade: websocket\r\n\r\n",
+   "httpResponse": "HTTP/1.1 101 Switching Protocols\r\nServer: AutobahnTestSuite/0.8.2-0.10.9\r\nX-Powered-By: AutobahnPython/0.10.9\r\nUpgrade: WebSocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: k+A6/kvcOX/n/FUCnxy/7U1qrXI=\r\n\r\n",
+   "id": "9.3.8",
+   "isServer": true,
+   "localCloseCode": 1000,
+   "localCloseReason": null,
+   "received": [],
+   "remoteCloseCode": 1000,
+   "remoteCloseReason": null,
+   "reportCompressionRatio": false,
+   "reportTime": true,
+   "result": "Received text message of length 4194304.",
+   "resultClose": "Connection was properly closed",
+   "rxFrameStats": {
+      "0": 1023,
+      "1": 1,
+      "8": 1
+   },
+   "rxOctetStats": {
+      "1": 1,
+      "2": 1,
+      "7": 1,
+      "210": 1,
+      "4104": 1,
+      "16418": 1,
+      "20518": 1,
+      "20522": 1,
+      "28730": 1,
+      "28735": 1,
+      "32832": 1,
+      "32840": 2,
+      "36928": 1,
+      "36929": 2,
+      "36932": 1,
+      "36934": 1,
+      "36936": 1,
+      "36937": 1,
+      "36940": 3,
+      "41032": 1,
+      "41036": 2,
+      "41038": 1,
+      "41040": 1,
+      "41041": 1,
+      "41042": 2,
+      "41043": 1,
+      "41048": 1,
+      "45137": 1,
+      "45140": 1,
+      "45143": 1,
+      "45146": 1,
+      "45148": 1,
+      "46609": 1,
+      "47448": 1,
+      "49241": 1,
+      "49242": 1,
+      "49246": 1,
+      "49247": 1,
+      "49250": 2,
+      "49251": 1,
+      "49256": 1,
+      "53348": 1,
+      "53354": 1,
+      "57452": 1,
+      "57454": 1,
+      "57457": 1,
+      "57458": 1,
+      "61560": 1,
+      "63095": 1,
+      "64200": 1,
+      "65536": 30
+   },
+   "started": "2025-03-16T00:15:14.766Z",
+   "trafficStats": null,
+   "txFrameStats": {
+      "0": 4,
+      "1": 1,
+      "8": 1
+   },
+   "txOctetStats": {
+      "2": 1,
+      "4": 1,
+      "206": 1,
+      "1048586": 4
+   },
+   "wasClean": true,
+   "wasCloseHandshakeTimeout": false,
+   "wasNotCleanReason": null,
+   "wasOpenHandshakeTimeout": false,
+   "wasServerConnectionDropTimeout": false,
+   "wirelog": [
+      [
+         "RO",
+         [
+            210,
+            "474554202f72756e436173653f636173653d323636266167656e743d777320485454502f312e310d0a486f73743a206c6f63616c686f73743a393030310d0a55 ..."
+         ]
+      ],
+      [
+         "TO",
+         [
+            206,
+            "485454502f312e312031303120537769746368696e672050726f746f636f6c730d0a5365727665723a204175746f6261686e5465737453756974652f302e382e ..."
+         ],
+         false
+      ],
+      [
+         "TI",
+         100
+      ],
+      [
+         "TF",
+         [
+            2,
+            "0x03e8"
+         ],
+         8,
+         true,
+         0,
+         null,
+         null,
+         null,
+         false
+      ],
+      [
+         "TO",
+         [
+            4,
+            "880203e8"
+         ],
+         false
+      ],
+      [
+         "RO",
+         [
+            1,
+            "88"
+         ]
+      ],
+      [
+         "RO",
+         [
+            7,
+            "82d407ceabd7ef"
+         ]
+      ],
+      [
+         "RF",
+         [
+            2,
+            "0x03e8"
+         ],
+         8,
+         true,
+         0,
+         true,
+         "d407ceab"
+      ]
+   ]
+}
