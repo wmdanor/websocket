@@ -1,0 +1,145 @@
+{
+   "agent": "AVR / W5100 / Ethernet",
+   "behavior": "OK",
+   "behaviorClose": "OK",
+   "case": 120,
+   "closedByMe": false,
+   "createStats": true,
+   "createWirelog": true,
+   "description": "Send a text message with payload which is not valid UTF-8 in one fragment.<br><br>Payload: 0xc020c120c220c320c420c520c620c720c820c920ca20cb20cc20cd20ce20cf20d020d120d220d320d420d520d620d720d820d920da20db20dc20dd20de20",
+   "droppedByMe": false,
+   "duration": 1,
+   "expectation": "The connection is failed immediately, since the payload is not valid UTF-8.",
+   "expected": {
+      "OK": []
+   },
+   "expectedClose": {
+      "closeCode": [
+         1007
+      ],
+      "closedByMe": false,
+      "closedByWrongEndpointIsFatal": true,
+      "requireClean": false
+   },
+   "failedByMe": false,
+   "httpRequest": "GET / HTTP/1.1\r\nUser-Agent: AutobahnTestSuite/0.8.2-0.10.9\r\nHost: host.docker.internal:9001\r\nUpgrade: WebSocket\r\nConnection: Upgrade\r\nPragma: no-cache\r\nCache-Control: no-cache\r\nSec-WebSocket-Key: zIY88e8FlRpPnLGuhu2PIQ==\r\nSec-WebSocket-Version: 13\r\n\r\n",
+   "httpResponse": "HTTP/1.1 101 Switching Protocols\r\nAccess-Control-Allow-Origin: *\r\nConnection: Upgrade\r\nSec-Websocket-Accept: F/90HNEG/OO910cTdnyLqOVHSgA=\r\nUpgrade: websocket\r\nDate: Sun, 16 Mar 2025 00:20:38 GMT\r\n\r\n",
+   "id": "6.13.1",
+   "isServer": false,
+   "localCloseCode": 1000,
+   "localCloseReason": null,
+   "received": [],
+   "remoteCloseCode": 1007,
+   "remoteCloseReason": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+   "reportCompressionRatio": false,
+   "reportTime": false,
+   "result": "Actual events match at least one expected.",
+   "resultClose": "Connection was properly closed",
+   "rxFrameStats": {
+      "8": 1
+   },
+   "rxOctetStats": {
+      "31": 1,
+      "198": 1
+   },
+   "started": "2025-03-16T00:20:38.349Z",
+   "trafficStats": null,
+   "txFrameStats": {
+      "1": 1,
+      "8": 1
+   },
+   "txOctetStats": {
+      "8": 1,
+      "68": 1,
+      "251": 1
+   },
+   "wasClean": true,
+   "wasCloseHandshakeTimeout": false,
+   "wasNotCleanReason": null,
+   "wasOpenHandshakeTimeout": false,
+   "wasServerConnectionDropTimeout": false,
+   "wirelog": [
+      [
+         "TO",
+         [
+            251,
+            "474554202f20485454502f312e310d0a557365722d4167656e743a204175746f6261686e5465737453756974652f302e382e322d302e31302e390d0a486f7374 ..."
+         ],
+         false
+      ],
+      [
+         "RO",
+         [
+            198,
+            "485454502f312e312031303120537769746368696e672050726f746f636f6c730d0a4163636573732d436f6e74726f6c2d416c6c6f772d4f726967696e3a202a ..."
+         ]
+      ],
+      [
+         "TF",
+         [
+            62,
+            "0xc020c120c220c320c420c520c620c720c820c920ca20cb20cc20cd20ce20cf20d020d120d220d320d420d520d620d720d820d920da20db20dc20dd20de20 ..."
+         ],
+         1,
+         true,
+         0,
+         "41dad23a",
+         null,
+         null,
+         false
+      ],
+      [
+         "TO",
+         [
+            68,
+            "81be41dad23a81fa131a83fa111a85fa171a87fa151a89fa1b1a8bfa191a8dfa1f1a8ffa1d1a91fa031a93fa011a95fa071a97fa051a99fa0b1a9bfa091a9dfa ..."
+         ],
+         false
+      ],
+      [
+         "KL",
+         0.5
+      ],
+      [
+         "RO",
+         [
+            31,
+            "881d03ef000000000000000000000000000000000000000000000000000000"
+         ]
+      ],
+      [
+         "RF",
+         [
+            29,
+            "0x03ef000000000000000000000000000000000000000000000000000000"
+         ],
+         8,
+         true,
+         0,
+         false,
+         null
+      ],
+      [
+         "TF",
+         [
+            2,
+            "0x03e8"
+         ],
+         8,
+         true,
+         0,
+         "1da436ae",
+         null,
+         null,
+         false
+      ],
+      [
+         "TO",
+         [
+            8,
+            "88821da436ae1e4c"
+         ],
+         false
+      ]
+   ]
+}

@@ -1,0 +1,180 @@
+{
+   "agent": "AVR / W5100 / Ethernet",
+   "behavior": "OK",
+   "behaviorClose": "OK",
+   "case": 262,
+   "closedByMe": true,
+   "createStats": true,
+   "createWirelog": true,
+   "description": "Send fragmented text message message with message payload of length 4 * 2**20 (4M). Sent out in fragments of 4k.",
+   "droppedByMe": false,
+   "duration": 24,
+   "expectation": "Receive echo'ed text message (with payload as sent).",
+   "expected": {},
+   "expectedClose": {
+      "closeCode": [
+         1000
+      ],
+      "closedByMe": true,
+      "requireClean": true
+   },
+   "failedByMe": false,
+   "httpRequest": "GET / HTTP/1.1\r\nUser-Agent: AutobahnTestSuite/0.8.2-0.10.9\r\nHost: host.docker.internal:9001\r\nUpgrade: WebSocket\r\nConnection: Upgrade\r\nPragma: no-cache\r\nCache-Control: no-cache\r\nSec-WebSocket-Key: A59iLrxTvLCzNnItwCNs3Q==\r\nSec-WebSocket-Version: 13\r\n\r\n",
+   "httpResponse": "HTTP/1.1 101 Switching Protocols\r\nAccess-Control-Allow-Origin: *\r\nConnection: Upgrade\r\nSec-Websocket-Accept: X7+q+WikZVbSUgUAs7CMniHqPvw=\r\nUpgrade: websocket\r\nDate: Sun, 16 Mar 2025 00:20:39 GMT\r\n\r\n",
+   "id": "9.3.4",
+   "isServer": false,
+   "localCloseCode": 1000,
+   "localCloseReason": null,
+   "received": [],
+   "remoteCloseCode": 1000,
+   "remoteCloseReason": null,
+   "reportCompressionRatio": false,
+   "reportTime": true,
+   "result": "Received text message of length 4194304.",
+   "resultClose": "Connection was properly closed",
+   "rxFrameStats": {
+      "0": 1023,
+      "1": 1,
+      "8": 1
+   },
+   "rxOctetStats": {
+      "1": 10,
+      "2": 54,
+      "4": 42,
+      "198": 1,
+      "4096": 26,
+      "4097": 22,
+      "4098": 59,
+      "4099": 25,
+      "4100": 216,
+      "4101": 34,
+      "4102": 21,
+      "4103": 3,
+      "4104": 27,
+      "8196": 33,
+      "8197": 4,
+      "8198": 10,
+      "8199": 26,
+      "8200": 35,
+      "8201": 9,
+      "8202": 7,
+      "8203": 2,
+      "8204": 4,
+      "12296": 2,
+      "12297": 3,
+      "12298": 6,
+      "12299": 5,
+      "12300": 3,
+      "12301": 2,
+      "12302": 4,
+      "12303": 2,
+      "16400": 3,
+      "16402": 1,
+      "20496": 1,
+      "20498": 1,
+      "20499": 1,
+      "20500": 1,
+      "20502": 1,
+      "20504": 1,
+      "24597": 1,
+      "24598": 1,
+      "24599": 1,
+      "24600": 1,
+      "24601": 3,
+      "24602": 1,
+      "24603": 1,
+      "28697": 1,
+      "28698": 3,
+      "28700": 1,
+      "28702": 1,
+      "28704": 1,
+      "31616": 1,
+      "32800": 1,
+      "32801": 1,
+      "36904": 1,
+      "40996": 1,
+      "45100": 1,
+      "62812": 1,
+      "65536": 2
+   },
+   "started": "2025-03-16T00:20:39.498Z",
+   "trafficStats": null,
+   "txFrameStats": {
+      "0": 1024,
+      "1": 1,
+      "8": 1
+   },
+   "txOctetStats": {
+      "6": 1,
+      "8": 1,
+      "251": 1,
+      "4104": 1024
+   },
+   "wasClean": true,
+   "wasCloseHandshakeTimeout": false,
+   "wasNotCleanReason": null,
+   "wasOpenHandshakeTimeout": false,
+   "wasServerConnectionDropTimeout": false,
+   "wirelog": [
+      [
+         "TO",
+         [
+            251,
+            "474554202f20485454502f312e310d0a557365722d4167656e743a204175746f6261686e5465737453756974652f302e382e322d302e31302e390d0a486f7374 ..."
+         ],
+         false
+      ],
+      [
+         "RO",
+         [
+            198,
+            "485454502f312e312031303120537769746368696e672050726f746f636f6c730d0a4163636573732d436f6e74726f6c2d416c6c6f772d4f726967696e3a202a ..."
+         ]
+      ],
+      [
+         "TI",
+         100
+      ],
+      [
+         "TF",
+         [
+            2,
+            "0x03e8"
+         ],
+         8,
+         true,
+         0,
+         "cd9b2021",
+         null,
+         null,
+         false
+      ],
+      [
+         "TO",
+         [
+            8,
+            "8882cd9b2021ce73"
+         ],
+         false
+      ],
+      [
+         "RO",
+         [
+            4,
+            "880203e8"
+         ]
+      ],
+      [
+         "RF",
+         [
+            2,
+            "0x03e8"
+         ],
+         8,
+         true,
+         0,
+         false,
+         null
+      ]
+   ]
+}
